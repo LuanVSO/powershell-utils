@@ -11,7 +11,7 @@ $newpath = "$env:OneDriveConsumer\settings\$((Get-ItemProperty $file).Name)"
 
 Move-Item $file $newpath
 
-if (test-path $file -PathType Leaf) {
+if (test-path $newpath -PathType Leaf) {
 	New-Item $file -ItemType SymbolicLink -Value $newpath
 }
 else {
