@@ -31,7 +31,7 @@ Mount-WindowsImage -Path .\image -ImagePath ".\expandediso\sources\install.wim" 
 Set-WindowsProductKey -ProductKey "" -Path .\image
 Add-WindowsDriver -Path .\image -Driver .\drivers\ -Recurse
 Enable-WindowsOptionalFeature -Path .\image -FeatureName "Containers", "Microsoft-Hyper-V-All", "Microsoft-Windows-Subsystem-Linux", "Containers-DisposableClientVM", "HypervisorPlatform", "VirtualMachinePlatform", "HostGuardian"
-foreach ($item in "Language.Basic~~~en-US~", "Language.Basic~~~pt-BR~", "Language.Fonts.Jpan~~~und-JPAN~", "Language.Handwriting~~~en-US~", "Language.Handwriting~~~pt-BR~", "Language.OCR~~~en-US~", "Language.OCR~~~pt-BR~", "Language.Speech~~~en-US~", "Language.Speech~~~pt-BR~", "Language.TextToSpeech~~~en-US~", "Language.TextToSpeech~~~pt-BR~", "MathRecognizer~~~~", "OpenSSH.Client~~~~") {
+foreach ($item in "MathRecognizer~~~~", "OpenSSH.Client~~~~") {
 	Add-WindowsCapability -Path .\image -Name $item
 }
 dismount-WindowsImage -Path .\image -Save -CheckIntegrity
