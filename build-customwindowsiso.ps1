@@ -1,8 +1,22 @@
 [CmdletBinding()]
 param (
-	[Parameter()]
+	# Specifies a path to the iso file
+	[Parameter(
+		Mandatory = $true,
+		Position = 0,
+		ParameterSetName = "ParameterSetName",
+		ValueFromPipeline = $false,
+		ValueFromPipelineByPropertyName = $true,
+		HelpMessage = "Path to iso file")]
+	[Alias("PSPath")]
+	[ValidateNotNullOrEmpty()]
 	[string]
-	$SourceIsoPath
+	$SourceIsoPath,
+	# Parameter help description
+	[Parameter(Mandatory = $true,
+		Position = 1, HelpMessage = "windows product key")]
+	[string]
+	$ProductKey
 )
 
 $ErrorActionPreference = 'Stop'
@@ -11,7 +25,7 @@ $ErrorActionPreference = 'Stop'
 Get-Command oscdimg.exe, 7z.exe -ErrorAction Stop
 Test-Path ~\Downloads\appraiserres.dll
 
-$SourceIsoPath = Resolve-Path $SourceIsoPath
+$SourceIsoPath = convert-Path $SourceIsoPath
 
 $SourceIsoPath
 Push-Location temp:
@@ -28,8 +42,9 @@ Push-Location temp:
 
 mkdir -Path .\image
 Mount-WindowsImage -Path .\image -ImagePath ".\expandediso\sources\install.wim" -Index 4
-Set-WindowsProductKey -ProductKey "" -Path .\image
+Set-WindowsProductKey -ProductKey $ProductKey -Path .\image
 Add-WindowsDriver -Path .\image -Driver .\drivers\ -Recurse
+Expand-Archive -Path "$env:OneDriveConsumer\settings\Bypass Insider Block.zip" -DestinationPath '.\image\Users\All Users\Desktop\'
 Enable-WindowsOptionalFeature -Path .\image -FeatureName "Containers", "Microsoft-Hyper-V-All", "Microsoft-Windows-Subsystem-Linux", "Containers-DisposableClientVM", "HypervisorPlatform", "VirtualMachinePlatform", "HostGuardian"
 foreach ($item in "MathRecognizer~~~~", "OpenSSH.Client~~~~") {
 	Add-WindowsCapability -Path .\image -Name $item
