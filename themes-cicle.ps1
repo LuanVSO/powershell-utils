@@ -14,9 +14,10 @@ for ($i = 0; $i -lt $themes.Count; $i++) {
 	ColorTool.exe -x -q $themes[$i]
 	Write-Progress -Activity "theme:" -Status $themes[$i] -PercentComplete (map_ranges 0 $themes.Count 1 100 $i)
 	switch ([console]::ReadKey($true).KeyChar) {
-		'q' { break; }
+		'q' { return; }
 		'f' { $i += 9 }
 		'b' { $i = $themes.count - 2 }
+		'p' { $i -= 2 }
 		Default {}
 	}
 }
