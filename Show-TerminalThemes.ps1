@@ -16,6 +16,7 @@ for ($i = 0; $i -lt $themes.Count; $i++) {
 	switch ([console]::ReadKey($true).KeyChar) {
 		'q' { return; }
 		'f' { $i += 9 }
+		'e' { colortool -t $themes[$i] | Select-Object -Skip 1 | Set-Clipboard }
 		'b' { $i = $themes.count - 2 }
 		'p' { $i -= 2 }
 		Default {}
